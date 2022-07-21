@@ -12,6 +12,17 @@ class ExemploLineEdit(QWidget):
         self.label_linha_0_coluna_0 = QLabel("Coluna 0")
         self.edit_linha_1_coluna_0 = QLineEdit()
 
+        self.label_linha_0_coluna_1 = QLabel("Coluna 1")
+        self.edit_linha_1_coluna_1 = QLineEdit()
+
+        self.label_linha_0_coluna_2 = QLabel("Coluna 2")
+        self.edit_linha_1_coluna_2 = QLineEdit()
+
+        self.label_linha_2_coluna_0_ate_coluna2 = QLabel("Todas as colunas")
+        self. edit_linha_3_coluna_0_ate_coluna2 = QLineEdit()
+
+
+
 
 
 
