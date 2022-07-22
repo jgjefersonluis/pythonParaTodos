@@ -1,3 +1,5 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QWidget, QGroupBox, QLabel, QComboBox, QLineEdit, QGridLayout
 
 
@@ -86,6 +88,48 @@ class ExemploLineEdit(QWidget):
         edicaoLayout.addWidget(self.edicaoComboBox, 0, 1)
         edicaoLayout.addWidget(self.edicaoLineEdit, 1, 0, 1, 2)
         self.edicaoGrupo.setLayout(edicaoLayout)
+
+    def definirLayoutTela(self):
+        layoutTela = QGridLayout()
+        layoutTela.addWidget(self.senhaGrupo, 0, 0)
+        layoutTela.addWidget(self.validacaoGrupo, 1, 0)
+        layoutTela.addWidget(self.alinhamentoGrupo, 2, 0)
+        layoutTela.addWidget(self.mascaraGrupo, 0, 1)
+        layoutTela.addWidget(self.edicaoGrupo, 1, 1)
+        self.setLayout(layoutTela)
+
+    def definirEventos(self):
+        self.senhaComboBox.activated.connect(self.senhaChanged)
+        self.validacaoComboBox.activated.connect(self.validacaoChanged)
+        self.alinhamentoComboBox.activated.connect(self.alinhamentoChanged)
+        self.mascaraComboBox.activated.connect(self.mascaraChanged)
+        self.edicaoComboBox.activated.connect(self.edicaoChanged)
+        self.senhaComboBox.activated.connect(self.exibirChanged)
+
+    def senhaChanged(self, indice):
+        if indice == 0:
+            self.senhaLineEdit.setEchoMode(QLineEdit.Normal)
+        elif indice == 1:
+            self.senhaLineEdit.setEchoMode(QLineEdit.Password)
+        elif indice == 2:
+            self.senhaLineEdit.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        elif indice == 3:
+            self.senhaLineEdit.setEchoMode(QLineEdit.NoEcho)
+
+    def validacaoChanged(self, indice):
+        if indice == 0:
+            self.validacaoLineEdit.setAlignment(Qt.AlignLeft)
+            self.validacaoLineEdit.setMaxLength(20)
+            self.validacaoLineEdit.setValidator(None)
+        elif indice == 1:
+            self.validacaoLineEdit.setAlignment(Qt.AlignRigth)
+            self.validacaoLineEdit.setValidator(0, 100)
+        elif indice == 2:
+            self.validacaoLineEdit.setAlignment(Qt.AlignRigth)
+            self.validacaoLineEdit.setMaxLength(10)
+            self.validacaoLineEdit.setValidator(QDoubleValidator(-999.0, 999.0, 2))
+
+
 
 
 
