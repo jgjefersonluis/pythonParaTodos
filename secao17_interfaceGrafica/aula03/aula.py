@@ -1,7 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QDoubleValidator
-from PyQt5.QtWidgets import QWidget, QGroupBox, QLabel, QComboBox, QLineEdit, QGridLayout
-
+from PyQt5.QtGui import QDoubleValidator, QIntValidator
+from PyQt5.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox, QLabel, QLineEdit, QWidget)
 
 class ExemploLineEdit(QWidget):
     def __init__(self):
@@ -35,7 +34,7 @@ class ExemploLineEdit(QWidget):
 
     def criarGrupoValidacao(self):
         self.validacaoGrupo = QGroupBox("Validação")
-        validacaoLabel = QLabel("Tipo: ")
+        validacaoLabel = QLabel("Tipo:")
         self.validacaoComboBox = QComboBox()
         self.validacaoComboBox.addItem('Não validar')
         self.validacaoComboBox.addItem('Validar inteiro')
@@ -49,11 +48,11 @@ class ExemploLineEdit(QWidget):
 
     def criarGrupoAlinhamento(self):
         self.alinhamentoGrupo = QGroupBox("Alinhamento")
-        alinhamentoLabel = QLabel("Tipo: ")
+        alinhamentoLabel = QLabel("Tipo:")
         self.alinhamentoComboBox = QComboBox()
-        self.alinhamentoComboBox.addItem('Esquerda')
-        self.alinhamentoComboBox.addItem('Centro')
-        self.alinhamentoComboBox.addItem('Direita')
+        self.alinhamentoComboBox.addItem("Esquerda")
+        self.alinhamentoComboBox.addItem("Centro")
+        self.alinhamentoComboBox.addItem("Direita")
         self.alinhamentoLineEdit = QLineEdit()
         alinhamentoLayout = QGridLayout()
         alinhamentoLayout.addWidget(alinhamentoLabel, 0, 0)
@@ -63,25 +62,25 @@ class ExemploLineEdit(QWidget):
 
     def criarGrupoMascara(self):
         self.mascaraGrupo = QGroupBox("Máscara de entrada")
-        mascaraLabel = QLabel("Tipo: ")
+        mascaraLabel = QLabel("Tipo:")
         self.mascaraComboBox = QComboBox()
-        self.mascaraComboBox.addItem('Sem máscara')
-        self.mascaraComboBox.addItem('Celular')
-        self.mascaraComboBox.addItem('Data')
-        self.mascaraComboBox.addItem('CPF')
+        self.mascaraComboBox.addItem("Sem máscara")
+        self.mascaraComboBox.addItem("Celular")
+        self.mascaraComboBox.addItem("Data")
+        self.mascaraComboBox.addItem("CPF")
         self.mascaraLineEdit = QLineEdit()
         mascaraLayout = QGridLayout()
         mascaraLayout.addWidget(mascaraLabel, 0, 0)
-        mascaraLayout.addWidget(self.mascaramboBox, 0, 1)
+        mascaraLayout.addWidget(self.mascaraComboBox, 0, 1)
         mascaraLayout.addWidget(self.mascaraLineEdit, 1, 0, 1, 2)
         self.mascaraGrupo.setLayout(mascaraLayout)
 
     def criarGrupoEdicao(self):
-        self.edicaoGrupo = QGroupBox("Edicão")
-        edicaoLabel = QLabel("Somente leitura: ")
+        self.edicaoGrupo = QGroupBox("Edição")
+        edicaoLabel = QLabel("Somente leitura:")
         self.edicaoComboBox = QComboBox()
-        self.edicaoComboBox.addItem('Falso')
-        self.edicaoComboBox.addItem('Verdadeiro')
+        self.edicaoComboBox.addItem("Falso")
+        self.edicaoComboBox.addItem("Verdadeiro")
         self.edicaoLineEdit = QLineEdit()
         edicaoLayout = QGridLayout()
         edicaoLayout.addWidget(edicaoLabel, 0, 0)
@@ -104,7 +103,7 @@ class ExemploLineEdit(QWidget):
         self.alinhamentoComboBox.activated.connect(self.alinhamentoChanged)
         self.mascaraComboBox.activated.connect(self.mascaraChanged)
         self.edicaoComboBox.activated.connect(self.edicaoChanged)
-        self.senhaComboBox.activated.connect(self.exibirChanged)
+        self.senhaLineEdit.textChanged.connect(self.exibir_senha)
 
     def senhaChanged(self, indice):
         if indice == 0:
@@ -122,21 +121,52 @@ class ExemploLineEdit(QWidget):
             self.validacaoLineEdit.setMaxLength(20)
             self.validacaoLineEdit.setValidator(None)
         elif indice == 1:
-            self.validacaoLineEdit.setAlignment(Qt.AlignRigth)
-            self.validacaoLineEdit.setValidator(0, 100)
+            self.validacaoLineEdit.setAlignment(Qt.AlignRight)
+            self.validacaoLineEdit.setValidator(QIntValidator(0, 100))
         elif indice == 2:
-            self.validacaoLineEdit.setAlignment(Qt.AlignRigth)
+            self.validacaoLineEdit.setAlignment(Qt.AlignRight)
             self.validacaoLineEdit.setMaxLength(10)
             self.validacaoLineEdit.setValidator(QDoubleValidator(-999.0, 999.0, 2))
 
+        self.validacaoLineEdit.clear()
 
+    def alinhamentoChanged(self, indice):
+        if indice == 0:
+            self.alinhamentoLineEdit.setAlignment(Qt.AlignLeft)
+        elif indice == 1:
+            self.alinhamentoLineEdit.setAlignment(Qt.AlignCenter)
+        elif indice == 2:
+    	    self.alinhamentoLineEdit.setAlignment(Qt.AlignRight)
 
+    # self.mascaraLineEdit.setInputMask('(99)99999-9999;_')
+    # self.mascaraLineEdit.setInputMask('999.999.999-99;_')
+    def mascaraChanged(self, indice):
+        self.mascaraLineEdit.clear()
+        if indice == 0:
+            self.mascaraLineEdit.setInputMask('')
+        elif indice == 1:
+            self.mascaraLineEdit.setInputMask('(99)99999-9999;_')
+        elif indice == 2:
+            self.mascaraLineEdit.setInputMask('00/00/0000')
+            self.mascaraLineEdit.setText('00000000')
+            self.mascaraLineEdit.setCursorPosition(0)
+        elif indice == 3:
+            self.mascaraLineEdit.setInputMask('999.999.999-99')
 
+    def edicaoChanged(self, indice):
+        if indice == 0:
+            self.edicaoLineEdit.setReadOnly(False)
+        elif indice == 1:
+            self.edicaoLineEdit.setReadOnly(True)
 
+        self.edicaoLineEdit.clear()
 
+    def exibir_senha(self):
+        self.senhaLabelMostra.setText(self.senhaLineEdit.text())
 
-
-
-
-
-
+if __name__ == '__main__':
+    import sys
+    app = QApplication(sys.argv)
+    janela = ExemploLineEdit()
+    janela.show()
+    sys.exit(app.exec_())
